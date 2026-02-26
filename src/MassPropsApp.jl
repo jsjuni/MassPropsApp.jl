@@ -38,8 +38,7 @@ module MassPropsApp
     function (@main)(ARGS)
         
         args = parse_commandline()
-        println("Arguments: ", args)
-
+    
         rollup = args["include-uncertainties"] ? MassProps.rollup_mass_props_and_unc : MassProps.rollup_mass_props
         input = isnothing(args["input-file"]) ? stdin : open(args["input-file"], "r")
         df = read_data(input)
@@ -47,7 +46,7 @@ module MassPropsApp
         aggs = map(c -> label_for(tree, c), filter(v -> indegree(tree, v) > 0, vertices(tree)))
 
         result = rollup(tree, df)
-        CSV.write(stdout, result[in(aggs).(result.id), :], writeheader = true)
+        CSV.write(stdout, result[in(aggs).(result.id), :], writeheader = true, missingstring = "NA")
 
         exit(0)
     end
