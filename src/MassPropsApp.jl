@@ -46,7 +46,7 @@ module MassPropsApp
         input = isnothing(args["input-file"]) ? stdin : open(args["input-file"], "r")
         df = read_data(input)
         tree = tree_from_edgelist(df, :id, :pid)
-        out_labels = map(c -> label_for(tree, c), filter(v -> (args["omit_leaves"] ? (indegree(tree, v) > 0) : true), vertices(tree)))
+        out_labels = map(c -> label_for(tree, c), filter(v -> (args["omit-leaves"] ? (indegree(tree, v) > 0) : true), vertices(tree)))
 
         result = rollup(tree, df)
         CSV.write(stdout, result[in(out_labels).(result.id), :], writeheader = true, missingstring = "NA")
