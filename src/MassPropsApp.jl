@@ -13,6 +13,9 @@ module MassPropsApp
             "--include-uncertainties"
                 help = "Include uncertainties"
                 action = :store_true
+            "--omit-leaves"
+                help = "Omit leaf nodes from output"
+                action = :store_true
             "input-file"
                 help = "Input file (CSV)"
                 arg_type = String
@@ -43,10 +46,10 @@ module MassPropsApp
         input = isnothing(args["input-file"]) ? stdin : open(args["input-file"], "r")
         df = read_data(input)
         tree = tree_from_edgelist(df, :id, :pid)
-        aggs = map(c -> label_for(tree, c), filter(v -> indegree(tree, v) > 0, vertices(tree)))
+        out_labels = map(c -> label_for(tree, c), filter(v -> (args["omit_leaves"] ? (indegree(tree, v) > 0) : true), vertices(tree)))
 
         result = rollup(tree, df)
-        CSV.write(stdout, result[in(aggs).(result.id), :], writeheader = true, missingstring = "NA")
+        CSV.write(stdout, result[in(out_labels).(result.id), :], writeheader = true, missingstring = "NA")
 
         exit(0)
     end
