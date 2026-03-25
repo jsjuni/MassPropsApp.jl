@@ -13,6 +13,14 @@ module MassPropsApp
             "--include-uncertainties"
                 help = "Include uncertainties"
                 action = :store_true
+            "--id"
+                help = "Column name for node ID (default: id)"
+                arg_type = String
+                default = "id"
+            "--pid"
+                help = "Column name for parent ID (default: pid)"
+                arg_type = String
+                default = "pid"
             "--omit-leaves"
                 help = "Omit leaf nodes from output"
                 action = :store_true
@@ -45,7 +53,7 @@ module MassPropsApp
         rollup = args["include-uncertainties"] ? MassProps.rollup_mass_props_and_unc : MassProps.rollup_mass_props
         input = isnothing(args["input-file"]) ? stdin : open(args["input-file"], "r")
         df = read_data(input)
-        tree = tree_from_edgelist(df, :id, :pid)
+        tree = tree_from_edgelist(df, args["id"], args["pid"])
         out_labels = map(c -> label_for(tree, c), filter(v -> (args["omit-leaves"] ? (indegree(tree, v) > 0) : true), vertices(tree)))
 
         result = rollup(tree, df)
