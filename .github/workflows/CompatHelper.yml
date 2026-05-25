@@ -10,6 +10,9 @@ jobs:
   CompatHelper:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install CompatHelper
         run: using Pkg; Pkg.add("CompatHelper")
         shell: julia --color=yes {0}
