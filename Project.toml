@@ -14,7 +14,7 @@ RollupTree = "04c01c7a-6a3c-48fe-9315-f55725a63c92"
 
 [compat]
 ArgParse = "1.2.0"
-CSV = "0.10.16"
+CSV = "0.10.16, 1"
 DataFrames = "1.8.1"
 Graphs = "1.13.4"
 MetaGraphsNext = "0.8.0"
